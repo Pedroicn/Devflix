@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorEmail, setErrorEmail] = useState(null);
-  const [errorPassword, setErrorPassword] = useState(null);
-  const { user, signUp } = useContext(AuthContext);
+  const {user, signUp } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,6 +17,11 @@ const SignUp = () => {
       navigate('/')
     } catch (error) {
       console.log(error)
+      toast(error.message.slice(10), {
+        position: 'top-center',
+        theme: 'dark',
+        type: 'error',
+      })
     }
     
   }
@@ -63,6 +68,7 @@ const SignUp = () => {
 
         </div>
       </div>
+      <ToastContainer />
     </main>
   )
 }
