@@ -3,6 +3,9 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import AuthContext from '../context/AuthContext';
 import { db } from '../services/firebase';
 import { updateDoc, doc, onSnapshot} from 'firebase/firestore';
+import { AiOutlineClose } from 'react-icons/ai'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SavedMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -24,6 +27,23 @@ const SavedMovies = () => {
     });
   }, [user?.email]);
 
+  const movieRef = doc(db, 'users', `${ user?.email }`)
+
+  const deleteMovie = async (id) => {
+    try {
+      const result = movies.filter((movie) => movie.id !== id)
+      await updateDoc(movieRef, {
+        savedItems: result,
+      })
+    } catch (error) {
+      console.log(error);
+      toast(error.message.slice(10), {
+        position: 'top-center',
+        theme: 'dark',
+        type: 'error',
+      });
+    }
+  }
 
   return (
     <>
@@ -39,6 +59,9 @@ const SavedMovies = () => {
                   <p className='white-space-normal text-sm md:text-lg font-bold flex justify-center items-center h-full text-center'>
                     { movie?.title }
                   </p>
+
+                  <p onClick={ () => deleteMovie(movie.id)} className='absolute text-gray-300 top-4 right-4'><AiOutlineClose /></p>
+
                 </div>
               </div>
             ))
@@ -46,6 +69,7 @@ const SavedMovies = () => {
         </div>
         <MdChevronRight onClick={ slideRight } className='bg-white rounded-full right-0 absolute opacity-50 hover:opacity-100 cursor-pointer z-10' size={ 40 } />
       </section>
+      <ToastContainer />
     </>
   )
 }

@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  console.log(user);
 
   const handleLogout = async () => {
     try {
