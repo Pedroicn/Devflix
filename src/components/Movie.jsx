@@ -1,8 +1,31 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import AuthContext from '../context/AuthContext';
+import { db } from '../services/firebase';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
 const Movie = ({ movie }) => {
-  const [like, setLike] = useState(false)
+  const [like, setLike] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const { user } = useContext(AuthContext);
+
+  const movieId = doc(db, 'users', `${user?.email}`);
+
+  const saveMovie = async () => {
+    if (user?.email) {
+      setLike(!like);
+      setSaved(true);
+      await updateDoc(movieId, {
+        savedItems: arrayUnion({
+          id: movie.id,
+          title: movie.title,
+          img: movie.backdrop_path,
+        }),
+      });
+    } else {
+      alert('Faça login para favoritar um filme')
+    }
+  }
   return (
     <div className='w-[160px] sm:w-[200px] md:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2'>
       <img className='w-full h-auto block' src={`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`} alt={ movie?.title } />
@@ -10,7 +33,7 @@ const Movie = ({ movie }) => {
         <p className='white-space-normal text-sm md:text-lg font-bold flex justify-center items-center h-full text-center'>
           { movie?.title }
         </p>
-        <p>
+        <p onClick={ saveMovie }>
           {like ? <FaHeart className='absolute top-4 left-4 text-gray-400' /> : <FaRegHeart className='absolute top-4 left-4 text-gray-300' />}
         </p>
       </div>
