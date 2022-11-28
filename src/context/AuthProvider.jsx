@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AuthContext from './AuthContext'
-import auth from '../services/firebase'
+import {auth, db }from '../services/firebase'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,11 +8,17 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
+import { setDoc, doc } from 'firebase/firestore';
+
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
   function signUp(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
+    createUserWithEmailAndPassword(auth, email, password);
+    setDoc(doc(db, 'users', email), {
+      saved: [],
+    })
   };
 
   function signIn(email, password) {
