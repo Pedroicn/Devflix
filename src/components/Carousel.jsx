@@ -27,7 +27,7 @@ const Carousel = ({ title, fetchApi, rowId }) => {
   return (
     <>
       <h2 className='text-white font-bold md:text-xl p-4'>{ title }</h2>
-      <section className='realtive flex items-center'>
+      <section className='relative flex items-center'>
         <MdChevronLeft onClick={ slideLeft } className='bg-white rounded-full left-0 absolute opacity-50 hover:opacity-100 cursor-pointer z-10' size={ 40 } />
         <div id={ 'slider' + rowId } className='w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide relative'>
           {

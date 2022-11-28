@@ -16,7 +16,6 @@ const SignUp = () => {
       await signUp(email, password);
       navigate('/')
     } catch (error) {
-      console.log(error)
       toast(error.message.slice(10), {
         position: 'top-center',
         theme: 'dark',
