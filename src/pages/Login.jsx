@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {user, signIn } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -68,6 +68,7 @@ const Login = () => {
 
         </div>
       </div>
+      <ToastContainer />
     </main>
   )
 }
